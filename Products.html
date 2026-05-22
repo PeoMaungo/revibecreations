@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revibe Creations | Products</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body{ background:#fdf8f2; }
+
+    #main-header{
+      width:100%;
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:1000;
+      padding:14px 60px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:rgba(84, 56, 36, 0.92);
+      backdrop-filter:blur(10px);
+      box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    }
+    .logo-brand img{ height:58px; width:auto; }
+    .nav-menu{ display:flex; align-items:center; gap:28px; list-style:none; margin:0; }
+    .nav-menu li a{ text-decoration:none; color:#fff8f0; font-weight:500; transition:0.25s; position:relative; display:inline-flex; align-items:center; gap:8px; }
+    .nav-menu li a::after{ content:''; position:absolute; left:0; bottom:-4px; width:0; height:2.5px; background:#f3d7b6; transition:0.3s; border-radius:2px; }
+    .nav-menu li a:hover::after, .nav-menu li a.active::after{ width:100%; }
+    .nav-menu li a:hover, .nav-menu li a.active{ color:#fbe9c3; }
+    .cart-badge{ background:#f3d7b6; color:#5c4033; padding:2px 8px; border-radius:40px; font-size:0.7rem; font-weight:800; margin-left:6px; }
+    .hamburger{ display:none; font-size:28px; color:white; cursor:pointer; background:none; border:none; }
+    
+    @media(max-width:880px){
+      #main-header{ padding:12px 25px; }
+      .hamburger{ display:block; }
+      .nav-menu{ position:fixed; top:82px; right:-100%; width:270px; height:calc(100vh - 82px); background:#5a3e2b; flex-direction:column; align-items:flex-start; padding:40px 30px; gap:30px; transition:right 0.35s ease; box-shadow:-5px 0 20px rgba(0,0,0,0.2); border-radius:20px 0 0 20px; }
+      .nav-menu.active{ right:0; }
+      .nav-menu li{ width:100%; }
+      .nav-menu li a{ font-size:1.2rem; width:100%; }
+    }
+    @media(max-width:480px){ .logo-brand img{ height:48px; } }
+
+    .page-hero{ background:linear-gradient(135deg,#cfa67b,#9b6e4c); padding:140px 8% 60px; text-align:center; color:white; }
+    .page-hero h1{ font-size:3rem; font-weight:700; }
+    
+    .category-section{ margin-bottom: 60px; }
+    .category-title{ font-size: 2rem; font-weight:700; color:#5a3e2b; margin-bottom:30px; padding-bottom:10px; border-bottom:3px solid #cfa67b; display:inline-block; }
+    .products-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:30px; margin-bottom:40px; }
+    .product-card{ background:white; border-radius:24px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.08); transition:0.3s; text-align:center; display:flex; flex-direction:column; }
+    .product-card:hover{ transform:translateY(-8px); box-shadow:0 12px 25px rgba(0,0,0,0.12); }
+    .product-card img{ width:100%; height:220px; object-fit:cover; background:#f0ede8; }
+    .product-info{ padding:20px; flex-grow:1; display:flex; flex-direction:column; }
+    .product-info h3{ color:#5a3e2b; margin-bottom:8px; font-size:1.2rem; }
+    .product-desc{ font-size:0.85rem; color:#7b6a63; margin-bottom:12px; }
+    .price{ font-size:1.5rem; font-weight:700; color:#a77b55; margin:8px 0; }
+    
+    .color-selector{ margin:12px 0; text-align:left; }
+    .color-label{ font-size:0.8rem; font-weight:600; color:#5a3e2b; margin-bottom:5px; display:block; }
+    .color-buttons{ display:flex; gap:8px; flex-wrap:wrap; }
+    .color-option{ width:32px; height:32px; border-radius:50%; cursor:pointer; border:2px solid #ddd; transition:0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+    .color-option.selected{ border:3px solid #333; transform:scale(1.05); box-shadow:0 0 0 2px #f3d7b6; }
+    .color-option:hover{ transform:scale(1.1); }
+    
+    .btn-cart{ background:#6d4c41; color:white; border:none; padding:12px; border-radius:40px; font-weight:600; transition:0.3s; width:100%; margin-top:12px; cursor:pointer; }
+    .btn-cart:hover{ background:#8b5e3c; transform:translateY(-2px); }
+    
+    footer{ background:#5a3e2b; color:white; text-align:center; padding:25px; margin-top:40px; }
+    .container-products{ padding:20px 8% 40px; }
+    
+    @media(max-width:768px){
+      .container-products{ padding:20px 5%; }
+      .category-title{ font-size:1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="main-header">
+  <a class="logo-brand" href="index.html"><img src="IMAGES/revibelogo.jpeg" alt="Revibe Logo" onerror="this.src='https://placehold.co/60x60?text=Revibe'"></a>
+  <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
+  <ul class="nav-menu" id="navList">
+    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="products.html" class="active"><i class="fas fa-box-open"></i> Products</a></li>
+    <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+    <li><a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    <li><a href="account.html"><i class="fas fa-user"></i> Account</a></li>
+    <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart <span class="cart-badge" id="cartCountNav">0</span></a></li>
+  </ul>
+</header>
+
+<section class="page-hero"><h1>🌿 Our Eco Products</h1><p>Handmade from recycled materials with love | Choose your favorite color!</p></section>
+
+<div class="container-products">
+  
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-fire"></i> Scented Candles</h2>
+    <div class="products-grid" id="candlesGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-basket-shopping"></i> Laundry Baskets</h2>
+    <div class="products-grid" id="laundryGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-tshirt"></i> Pegs (set of 12)</h2>
+    <div class="products-grid" id="pegsGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-tint"></i> Water Bottles</h2>
+    <div class="products-grid" id="bottlesGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-puzzle-piece"></i> Toys</h2>
+    <div class="products-grid" id="toysGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-chair"></i> Chairs</h2>
+    <div class="products-grid" id="chairsGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-child"></i> Children's Chairs</h2>
+    <div class="products-grid" id="kidsChairsGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-mug-hot"></i> Cups</h2>
+    <div class="products-grid" id="cupsGrid"></div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="category-title"><i class="fas fa-utensils"></i> Lunch Boxes</h2>
+    <div class="products-grid" id="lunchboxGrid"></div>
+  </div>
+</div>
+
+<footer><p><i class="fas fa-recycle"></i> Revibe Creations © 2026 — Reimagine • Recycle • Revibe</p></footer>
+
+<script>
+  // Your existing product data and functions (keep as is)
+  const candles = [
+    { name: "Lavender Serenity", price: 39, img: "IMAGES/lavender.webp", desc: "Calming lavender, upcycled oil" },
+    { name: "Orange Zest", price: 39, img: "IMAGES/orange.webp", desc: "Fresh and zesty" },
+    { name: "Vanilla Dream", price: 39, img: "IMAGES/vanilla.webp", desc: "Warm vanilla, cozy vibes" },
+    { name: "Mint Breeze", price: 39, img: "IMAGES/mint.webp", desc: "Refreshing peppermint" },
+    { name: "Apple Spice", price: 39, img: "IMAGES/apple.webp", desc: "Sweet apple & cinnamon" },
+    { name: "Lemon Grove", price: 39, img: "IMAGES/lemon.webp", desc: "Natural and earthy" }
+  ];
+  
+  const laundryItems = [
+    { name: "Woven Laundry Basket", price: 120, img: "IMAGES/woven.webp", desc: "Sturdy recycled plastic weave, spacious" },
+    { name: "Round Storage Basket", price: 135, img: "IMAGES/laundry3.webp", desc: "Collapsible eco-friendly design" },
+    { name: "Tall Laundry Hamper", price: 150, img: "IMAGES/hamper.webp", desc: "Large capacity with handles" },
+    { name: "Square Laundry Bin", price: 110, img: "IMAGES/bin.webp", desc: "Compact and lightweight" }
+  ];
+  
+  const bottleItems = [
+    { name: "Eco Water Bottle", price: 85, img: "IMAGES/bottle.webp", desc: "Reusable, BPA-free, 750ml" },
+    { name: "Sport Squeeze Bottle", price: 95, img: "IMAGES/gym.webp", desc: "Leak-proof, perfect for gym" },
+    { name: "Insulated Water Bottle", price: 120, img: "IMAGES/insulated.webp", desc: "Keeps drinks cold for 12hrs" },
+    { name: "PETG plastic sports water bottle", price: 105, img: "IMAGES/big bottle.webp", desc: "Dumbbell Shaped Water Bottle" }
+  ];
+  
+  const chairItems = [
+    { name: "Charlow Chair", price: 90, img: "IMAGES/black chair.webp", desc: "Durable recycled plastic, stackable" },
+    { name: "Armchair Recycled", price: 120, img: "IMAGES/armchair.webp", desc: "Comfortable armrests, sturdy" },
+    { name: "Minimalist Side Chair", price: 130, img: "IMAGES/minimalist.webp", desc: "Lightweight modern design" },
+    { name: "Outdoor Patio Chair", price: 180, img: "IMAGES/outdoor.webp", desc: "Weather-resistant recycled material" }
+  ];
+  
+  const kidsChairItems = [
+    { name: "Toddler Eco Chair", price: 70, img: "IMAGES/toddler.webp", desc: "Safe rounded edges, small size" },
+    { name: "Kids Study Chair", price: 85, img: "IMAGES/study.webp", desc: "Ergonomic for ages 3-7" },
+    { name: "Playroom Stool", price: 50, img: "IMAGES/stool.webp", desc: "Lightweight and colorful" },
+    { name: "Children's Rocking Chair", price: 120, img: "IMAGES/rocking.webp", desc: "Fun gentle rock, eco-friendly" }
+  ];
+  
+  const cupItems = [
+    { name: "Recycled Tumbler", price: 20, img: "IMAGES/tumbler.webp", desc: "769ml, perfect for daily use" },
+    { name: "reusable coffee cup", price: 45, img: "IMAGES/cup 3.webp", desc: "Heat-resistant, 450ml" },
+    { name: "Travel Cup", price: 55, img: "IMAGES/travel.webp", desc: "Leak-proof lid, reusable,insulated" },
+    { name: "Wine/Beer Cup", price: 10, img: "IMAGES/wine.webp", desc: "Shatterproof party cup" }
+  ];
+  
+  const lunchboxItems = [
+    { name: "Classic Lunch Box", price: 20, img: "IMAGES/lunchbox4.webp", desc: "Single compartment, secure latch" },
+    { name: "Bento Style Box", price: 50, img: "IMAGES/bento.webp", desc: "Divided sections, snap lid" },
+    { name: "Mini Snack Container", price: 45, img: "IMAGES/snack.webp", desc: "Perfect for fruits and snacks" },
+    { name: "Kids Lunch Box", price: 90, img: "IMAGES/lunchbox3.webp", desc: "Includes water bottle" }
+  ];
+  
+  const pegs = [
+    { name: "Peg Set", price: 25, img: "IMAGES/peg.webp", desc: "Set of 12 eco pegs" },
+    { name: "Peg Set", price: 25, img: "IMAGES/pegg.webp", desc: "Recycled composite" },
+    { name: "Peg Set", price: 25, img: "IMAGES/pegs.webp", desc: "Mixed bright colors" },
+    { name: "Peg Set", price: 25, img: "IMAGES/peggg.webp", desc: "Strong grip, 12pcs" }
+  ];
+  
+  const toys = [
+    { name: "Building Blocks", price: 89, img: "IMAGES/blocks.webp", desc: "Creative recycled blocks" },
+    { name: "Toy Truck", price: 79, img: "IMAGES/truck.webp", desc: "Pull-back car" },
+    { name: "Puzzle Set", price: 95, img: "IMAGES/puzzle.webp", desc: "Animal shapes" },
+    { name: "Stacking Rings", price: 69, img: "IMAGES/rings.webp", desc: "Eco-friendly toy" }
+  ];
+  
+  const standardColors = [
+    { name: "Red", code: "#e34234" }, { name: "Yellow", code: "#f4d03f" },
+    { name: "Green", code: "#2ecc71" }, { name: "White", code: "#f5f5f5" },
+    { name: "Black", code: "#2c3e50" }, { name: "Blue", code: "#3498db" }
+  ];
+  const lunchboxColors = [...standardColors, { name: "Pink", code: "#f8c8d4" }];
+  
+  function addColorSupport(itemsArray, colorsArray) { return itemsArray.map((item, index) => ({ ...item, hasColors: true, colors: colorsArray, uniqueId: `item_${index}` })); }
+  
+  const laundryWithColor = addColorSupport(laundryItems, standardColors);
+  const bottlesWithColor = addColorSupport(bottleItems, standardColors);
+  const chairsWithColor = addColorSupport(chairItems, standardColors);
+  const kidsChairsWithColor = addColorSupport(kidsChairItems, standardColors);
+  const cupsWithColor = addColorSupport(cupItems, standardColors);
+  const lunchboxesWithColor = addColorSupport(lunchboxItems, lunchboxColors);
+  
+  function renderCandle(candle, idx) { return `<div class="product-card" data-product-id="candle_${idx}" data-product-name="${candle.name}" data-product-price="${candle.price}"><img src="${candle.img}" alt="${candle.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300'"><div class="product-info"><h3>${candle.name}</h3><p class="product-desc">${candle.desc}</p><div class="price">P${candle.price}</div><button class="btn-cart add-to-cart-btn">Add to Cart <i class="fas fa-shopping-cart"></i></button></div></div>`; }
+  
+  function renderColorProduct(product, category, idx, colorsList) { const productId = `${category}_${idx}`; const colorHtml = `<div class="color-selector" data-product-id="${productId}"><span class="color-label"><i class="fas fa-palette"></i> Color:</span><div class="color-buttons">${colorsList.map((col, cidx) => `<div class="color-option ${cidx === 0 ? 'selected' : ''}" style="background: ${col.code};" data-color-name="${col.name}"></div>`).join('')}</div></div>`; return `<div class="product-card" data-product-id="${productId}" data-product-name="${product.name}" data-product-price="${product.price}"><img src="${product.img}" alt="${product.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300'"><div class="product-info"><h3>${product.name}</h3><p class="product-desc">${product.desc}</p><div class="price">P${product.price}</div>${colorHtml}<button class="btn-cart add-to-cart-btn">Add to Cart <i class="fas fa-shopping-cart"></i></button></div></div>`; }
+  
+  function renderSimpleProduct(product, idx, category) { return `<div class="product-card" data-product-id="${category}_${idx}" data-product-name="${product.name}" data-product-price="${product.price}"><img src="${product.img}" alt="${product.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300'"><div class="product-info"><h3>${product.name}</h3><p class="product-desc">${product.desc}</p><div class="price">P${product.price}</div><button class="btn-cart add-to-cart-btn">Add to Cart <i class="fas fa-shopping-cart"></i></button></div></div>`; }
+  
+  function populateGrids() {
+    document.getElementById('candlesGrid').innerHTML = candles.map((c, i) => renderCandle(c, i)).join('');
+    document.getElementById('laundryGrid').innerHTML = laundryWithColor.map((item, i) => renderColorProduct(item, 'laundry', i, standardColors)).join('');
+    document.getElementById('pegsGrid').innerHTML = pegs.map((p, i) => renderSimpleProduct(p, i, 'pegs')).join('');
+    document.getElementById('bottlesGrid').innerHTML = bottlesWithColor.map((item, i) => renderColorProduct(item, 'bottle', i, standardColors)).join('');
+    document.getElementById('toysGrid').innerHTML = toys.map((t, i) => renderSimpleProduct(t, i, 'toys')).join('');
+    document.getElementById('chairsGrid').innerHTML = chairsWithColor.map((item, i) => renderColorProduct(item, 'chair', i, standardColors)).join('');
+    document.getElementById('kidsChairsGrid').innerHTML = kidsChairsWithColor.map((item, i) => renderColorProduct(item, 'kidschair', i, standardColors)).join('');
+    document.getElementById('cupsGrid').innerHTML = cupsWithColor.map((item, i) => renderColorProduct(item, 'cup', i, standardColors)).join('');
+    document.getElementById('lunchboxGrid').innerHTML = lunchboxesWithColor.map((item, i) => renderColorProduct(item, 'lunchbox', i, lunchboxColors)).join('');
+  }
+  
+  function attachProductEvents() {
+    document.querySelectorAll('.color-selector').forEach(selector => { const colorOptions = selector.querySelectorAll('.color-option'); colorOptions.forEach(opt => { opt.addEventListener('click', (e) => { e.stopPropagation(); colorOptions.forEach(c => c.classList.remove('selected')); opt.classList.add('selected'); const productCard = selector.closest('.product-card'); if (productCard) productCard.setAttribute('data-selected-color', opt.getAttribute('data-color-name')); }); }); });
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.preventDefault(); const productCard = btn.closest('.product-card'); const nameRaw = productCard.getAttribute('data-product-name'); const price = parseInt(productCard.getAttribute('data-product-price')); let selectedColor = productCard.getAttribute('data-selected-color'); let finalName = nameRaw; const hasColorSelector = productCard.querySelector('.color-selector'); if (hasColorSelector && selectedColor && selectedColor !== 'null') { finalName = `${nameRaw} (${selectedColor})`; } else if (hasColorSelector && !selectedColor) { const selectedDiv = productCard.querySelector('.color-option.selected'); if (selectedDiv) { const colName = selectedDiv.getAttribute('data-color-name'); if(colName) finalName = `${nameRaw} (${colName})`; } } let cart = JSON.parse(localStorage.getItem('revibeCart')) || []; cart.push({ name: finalName, price: price, timestamp: Date.now() }); localStorage.setItem('revibeCart', JSON.stringify(cart)); updateCartCount(); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Added!'; setTimeout(() => { btn.innerHTML = originalText; }, 1200); }); });
+  }
+  
+  function updateCartCount() { let cart = JSON.parse(localStorage.getItem('revibeCart')) || []; let badge = document.getElementById('cartCountNav'); if(badge) badge.innerText = cart.length; }
+  
+  function init() { populateGrids(); setTimeout(() => { document.querySelectorAll('.color-selector').forEach(selector => { const firstSelected = selector.querySelector('.color-option.selected'); const productCard = selector.closest('.product-card'); if (firstSelected && productCard) productCard.setAttribute('data-selected-color', firstSelected.getAttribute('data-color-name')); }); attachProductEvents(); }, 20); updateCartCount(); }
+  
+  const menuBtn = document.getElementById('menuToggle'), navMenu = document.getElementById('navList');
+  if(menuBtn) menuBtn.addEventListener('click',()=> navMenu.classList.toggle('active'));
+  document.querySelectorAll('.nav-menu a').forEach(link=>{ if(link.href === window.location.href) link.classList.add('active'); });
+  init();
+</script>
+
+<!-- Professional Pop-up Ad System -->
+<script>
+(function() {
+    const adConfig = { showOnLoad: true, loadDelay: 2000, showOnAddToCart: true, showOnScroll: true, scrollThreshold: 50, showOnExit: true, maxPerSession: 3, closeButtonDelay: 3 };
+    const ads = [
+        { title: "🎉 SPECIAL OFFER!", message: "Buy 20+ items and get 15% OFF your entire order!", buttonText: "Shop Now →", buttonLink: "products.html", icon: "fas fa-tags", bgColor: "#cfa67b" },
+        { title: "🌿 New Arrivals!", message: "Check out our new eco-friendly laundry baskets and water bottles!", buttonText: "Explore →", buttonLink: "products.html", icon: "fas fa-leaf", bgColor: "#8b5e3c" },
+        { title: "📢 Join Our Workshop!", message: "Learn candle making & plastic recycling. Limited spots available!", buttonText: "Register Now →", buttonLink: "events.html", icon: "fas fa-calendar-alt", bgColor: "#6d4c41" },
+        { title: "💚 Refer a Friend!", message: "Get 10% off your next order when you refer a friend to Revibe!", buttonText: "Learn More →", buttonLink: "contact.html", icon: "fas fa-share-alt", bgColor: "#2ecc71" },
+        { title: "🚚 Free Shipping!", message: "On orders over P500. Shop our eco-friendly collection today!", buttonText: "Shop Now →", buttonLink: "products.html", icon: "fas fa-truck", bgColor: "#3498db" }
+    ];
+    function getRandomAd() { return ads[Math.floor(Math.random() * ads.length)]; }
+    let sessionAdCount = parseInt(sessionStorage.getItem('revibeAdCount') || '0');
+    let popupActive = false, exitIntentTriggered = false;
+    function createPopup(ad) {
+        if (popupActive || (adConfig.maxPerSession > 0 && sessionAdCount >= adConfig.maxPerSession)) return null;
+        const popup = document.createElement('div'); popup.id = 'revibe-popup';
+        popup.innerHTML = `<div class="revibe-popup-overlay"></div><div class="revibe-popup-content" style="border-top: 5px solid ${ad.bgColor}"><button class="revibe-popup-close" id="revibePopupClose">&times;</button><div class="revibe-popup-icon" style="background: ${ad.bgColor}20; color: ${ad.bgColor}"><i class="${ad.icon}"></i></div><h3>${ad.title}</h3><p>${ad.message}</p><a href="${ad.buttonLink}" class="revibe-popup-btn" style="background: ${ad.bgColor}">${ad.buttonText}</a><p class="revibe-popup-delay-note">Close button appears in <span id="closeTimer">${adConfig.closeButtonDelay}</span> seconds</p></div>`;
+        document.body.appendChild(popup);
+        const closeBtn = popup.querySelector('#revibePopupClose'); closeBtn.disabled = true; closeBtn.style.opacity = '0.5'; closeBtn.style.cursor = 'not-allowed';
+        let secondsLeft = adConfig.closeButtonDelay; const timerSpan = popup.querySelector('#closeTimer');
+        const timer = setInterval(() => { secondsLeft--; if (timerSpan) timerSpan.textContent = secondsLeft; if (secondsLeft <= 0) { clearInterval(timer); closeBtn.disabled = false; closeBtn.style.opacity = '1'; closeBtn.style.cursor = 'pointer'; const note = popup.querySelector('.revibe-popup-delay-note'); if (note) note.style.display = 'none'; } }, 1000);
+        closeBtn.onclick = () => { popup.remove(); popupActive = false; };
+        popup.querySelector('.revibe-popup-overlay').onclick = () => { if (!closeBtn.disabled) { popup.remove(); popupActive = false; } };
+        popupActive = true; sessionAdCount++; sessionStorage.setItem('revibeAdCount', sessionAdCount);
+        return popup;
+    }
+    function showRandomAd() { if (sessionAdCount >= adConfig.maxPerSession && adConfig.maxPerSession > 0) return; const ad = getRandomAd(); createPopup(ad); }
+    function injectStyles() {
+        const style = document.createElement('style');
+        style.textContent = `.revibe-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10000;animation:fadeIn 0.3s ease}.revibe-popup-content{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:35px;border-radius:24px;width:90%;max-width:450px;text-align:center;z-index:10001;box-shadow:0 20px 40px rgba(0,0,0,0.3);animation:slideUp 0.4s ease}.revibe-popup-close{position:absolute;top:15px;right:20px;font-size:28px;background:none;border:none;cursor:pointer;color:#999}.revibe-popup-close:hover{color:#333}.revibe-popup-icon{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}.revibe-popup-content h3{color:#5a3e2b;font-size:1.6rem;margin-bottom:12px;font-weight:700}.revibe-popup-content p{color:#666;margin-bottom:20px}.revibe-popup-btn{display:inline-block;padding:12px 30px;color:white;text-decoration:none;border-radius:50px;font-weight:600;transition:0.3s;margin-top:10px}.revibe-popup-btn:hover{transform:translateY(-2px);filter:brightness(1.05);color:white}.revibe-popup-delay-note{font-size:0.7rem;color:#aaa;margin-top:15px}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{opacity:0;transform:translate(-50%,-40%)}to{opacity:1;transform:translate(-50%,-50%)}}@media(max-width:550px){.revibe-popup-content{padding:25px;width:85%}.revibe-popup-content h3{font-size:1.3rem}}`;
+        document.head.appendChild(style);
+    }
+    function initPopupSystem() {
+        injectStyles();
+        if (adConfig.showOnLoad) { setTimeout(() => showRandomAd(), adConfig.loadDelay); }
+        if (adConfig.showOnScroll) { let scrollTriggered = false; window.addEventListener('scroll', () => { if (!scrollTriggered && !popupActive) { const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100; if (scrollPercent >= adConfig.scrollThreshold) { scrollTriggered = true; showRandomAd(); } } }); }
+        if (adConfig.showOnExit) { document.addEventListener('mouseleave', (e) => { if (!exitIntentTriggered && !popupActive && e.clientY <= 0) { exitIntentTriggered = true; showRandomAd(); } }); }
+    }
+    function hookAddToCart() {
+        const observer = new MutationObserver(() => { document.querySelectorAll('.add-to-cart-btn, .btn-cart').forEach(btn => { if (!btn.hasAttribute('data-ad-hooked')) { btn.setAttribute('data-ad-hooked', 'true'); btn.addEventListener('click', () => { if (adConfig.showOnAddToCart) { setTimeout(() => showRandomAd(), 500); } }); } }); });
+        observer.observe(document.body, { childList: true, subtree: true });
+        document.querySelectorAll('.add-to-cart-btn, .btn-cart').forEach(btn => { if (!btn.hasAttribute('data-ad-hooked')) { btn.setAttribute('data-ad-hooked', 'true'); btn.addEventListener('click', () => { if (adConfig.showOnAddToCart) { setTimeout(() => showRandomAd(), 500); } }); } });
+    }
+    initPopupSystem(); hookAddToCart();
+})();
+</script>
+</body>
+</html>

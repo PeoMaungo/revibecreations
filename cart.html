@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revibe Creations | Cart</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body{ background:#fdf8f2; }
+
+    #main-header{
+      width:100%;
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:1000;
+      padding:14px 60px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:rgba(84, 56, 36, 0.92);
+      backdrop-filter:blur(10px);
+      box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    }
+    .logo-brand img{ height:58px; width:auto; }
+    .nav-menu{ display:flex; align-items:center; gap:28px; list-style:none; margin:0; }
+    .nav-menu li a{ text-decoration:none; color:#fff8f0; font-weight:500; transition:0.25s; position:relative; display:inline-flex; align-items:center; gap:8px; }
+    .nav-menu li a::after{ content:''; position:absolute; left:0; bottom:-4px; width:0; height:2.5px; background:#f3d7b6; transition:0.3s; border-radius:2px; }
+    .nav-menu li a:hover::after, .nav-menu li a.active::after{ width:100%; }
+    .nav-menu li a:hover, .nav-menu li a.active{ color:#fbe9c3; }
+    .cart-badge{ background:#f3d7b6; color:#5c4033; padding:2px 8px; border-radius:40px; font-size:0.7rem; font-weight:800; margin-left:6px; }
+    .hamburger{ display:none; font-size:28px; color:white; cursor:pointer; background:none; border:none; }
+    
+    @media(max-width:880px){
+      #main-header{ padding:12px 25px; }
+      .hamburger{ display:block; }
+      .nav-menu{ position:fixed; top:82px; right:-100%; width:270px; height:calc(100vh - 82px); background:#5a3e2b; flex-direction:column; align-items:flex-start; padding:40px 30px; gap:30px; transition:right 0.35s ease; }
+      .nav-menu.active{ right:0; }
+      .nav-menu li{ width:100%; }
+      .nav-menu li a{ font-size:1.2rem; width:100%; }
+    }
+    @media(max-width:480px){ .logo-brand img{ height:48px; } }
+
+    .cart-hero{ background:linear-gradient(rgba(92,64,51,0.7),rgba(92,64,51,0.7)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1400&auto=format&fit=crop'); background-size:cover; padding:140px 8% 60px; text-align:center; color:white; }
+    .cart-hero h1{ font-size:3rem; font-weight:700; }
+    .cart-container{ padding:60px 8%; display:grid; grid-template-columns:2fr 1fr; gap:40px; }
+    .cart-items{ background:white; border-radius:24px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.08); }
+    .cart-item{ display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee; gap:15px; flex-wrap:wrap; }
+    .item-details{ flex:2; }
+    .item-details h5{ margin-bottom:5px; color:#5a3e2b; }
+    .item-price{ font-weight:600; color:#a77b55; }
+    .remove-item{ background:#d84315; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; transition:0.3s; }
+    .remove-item:hover{ background:#a0401a; }
+    .summary{ background:white; border-radius:24px; padding:30px; box-shadow:0 5px 15px rgba(0,0,0,0.08); height:fit-content; position:sticky; top:120px; }
+    .summary h3{ margin-bottom:20px; color:#5a3e2b; }
+    .summary-line{ display:flex; justify-content:space-between; margin-bottom:12px; }
+    .total{ font-size:1.3rem; font-weight:700; color:#5a3e2b; margin-top:10px; }
+    .checkout-btn{ background:#6d4c41; color:white; width:100%; padding:14px; border:none; border-radius:12px; font-weight:600; margin-top:20px; transition:0.3s; cursor:pointer; text-align:center; display:inline-block; text-decoration:none; }
+    .checkout-btn:hover{ background:#8b5e3c; transform:translateY(-2px); }
+    .empty-cart{ text-align:center; padding:40px; }
+    .empty-cart a{ color:#6d4c41; font-weight:600; text-decoration:none; }
+    .empty-cart a:hover{ text-decoration:underline; }
+    footer{ background:#5a3e2b; color:white; text-align:center; padding:25px; margin-top:40px; }
+    @media(max-width:768px){ .cart-container{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<header id="main-header">
+  <a class="logo-brand" href="index.html"><img src="IMAGES/revibelogo.jpeg" alt="Revibe Logo"></a>
+  <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
+  <ul class="nav-menu" id="navList">
+    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="products.html"><i class="fas fa-box-open"></i> Products</a></li>
+    <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+    <li><a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    <li><a href="account.html"><i class="fas fa-user"></i> Account</a></li>
+    <li><a href="cart.html" class="active"><i class="fas fa-shopping-cart"></i> Cart <span class="cart-badge" id="cartCountNav">0</span></a></li>
+  </ul>
+</header>
+
+<section class="cart-hero"><h1>Your Shopping Cart</h1><p>Eco-friendly shopping with amazing bulk discounts 🌱</p></section>
+
+<div class="cart-container">
+  <div class="cart-items" id="cartItemsContainer">
+    <div class="empty-cart">Your cart is empty. <a href="products.html">Shop now</a></div>
+  </div>
+  <div class="summary">
+    <h3>Order Summary</h3>
+    <div id="summaryDetails"><p>Add items to see summary</p></div>
+    <a href="checkout.html" class="checkout-btn" id="checkoutBtn">Proceed to Checkout <i class="fas fa-arrow-right ms-2"></i></a>
+    <p class="text-muted mt-3 small">*15% discount automatically applied for 20+ items.</p>
+  </div>
+</div>
+
+<footer><p><i class="fas fa-recycle"></i> Revibe Creations © 2026 — Reimagine • Recycle • Revibe</p></footer>
+
+<script>
+  function updateCartCount() { 
+    let cart = JSON.parse(localStorage.getItem('revibeCart')) || []; 
+    let badge = document.getElementById('cartCountNav'); 
+    if(badge) badge.innerText = cart.length; 
+  }
+
+  function renderCart() {
+    let cart = JSON.parse(localStorage.getItem('revibeCart')) || [];
+    updateCartCount();
+    
+    let container = document.getElementById('cartItemsContainer');
+    
+    if(cart.length === 0) { 
+      container.innerHTML = '<div class="empty-cart">Your cart is empty. <a href="products.html">Shop now</a></div>';
+      updateSummary(0, 0, 0);
+      return; 
+    }
+    
+    // Group identical items and sum quantities
+    let grouped = {};
+    cart.forEach(item => { 
+      let key = item.name; 
+      if(!grouped[key]) {
+        grouped[key] = { ...item, quantity: 0 };
+      }
+      grouped[key].quantity++; 
+    });
+    
+    let html = '';
+    for(let name in grouped) {
+      let p = grouped[name];
+      html += `
+        <div class="cart-item">
+          <div class="item-details">
+            <h5>${p.name}</h5>
+            <div class="item-price">P${p.price} each</div>
+          </div>
+          <div>Quantity: ${p.quantity}</div>
+          <button class="remove-item" data-name="${p.name.replace(/'/g, "\\'")}">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+    
+    let totalItems = cart.length;
+    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let discount = totalItems >= 20 ? subtotal * 0.15 : 0;
+    let total = subtotal - discount;
+    
+    updateSummary(subtotal, discount, total);
+    
+    // Add remove event listeners
+    document.querySelectorAll('.remove-item').forEach(btn => {
+      btn.addEventListener('click', function() { 
+        let name = this.getAttribute('data-name');
+        let newCart = cart.filter(item => item.name !== name); 
+        localStorage.setItem('revibeCart', JSON.stringify(newCart)); 
+        renderCart(); 
+      });
+    });
+  }
+  
+  function updateSummary(subtotal, discount, total) { 
+    let summaryDiv = document.getElementById('summaryDetails'); 
+    let cart = JSON.parse(localStorage.getItem('revibeCart')) || [];
+    let totalItems = cart.length;
+    
+    summaryDiv.innerHTML = `
+      <div class="summary-line">
+        <span>Total Items</span>
+        <strong>${totalItems}</strong>
+      </div>
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <strong>P${subtotal}</strong>
+      </div>
+      ${discount > 0 ? `<div class="summary-line" style="color:green">
+        <span>Bulk Discount (15%)</span>
+        <strong>-P${Math.round(discount)}</strong>
+      </div>` : ''}
+      <hr>
+      <div class="summary-line total">
+        <span>Total</span>
+        <span>P${Math.round(total)}</span>
+      </div>
+    `;
+  }
+  
+  // Checkout button validation
+  document.getElementById('checkoutBtn')?.addEventListener('click', function(e) {
+    let cart = JSON.parse(localStorage.getItem('revibeCart')) || [];
+    if(cart.length === 0) { 
+      e.preventDefault();
+      alert('Your cart is empty! Please add items before checking out.');
+      return false;
+    }
+    return true;
+  });
+  
+  // Hamburger menu logic
+  const menuBtn = document.getElementById('menuToggle'), navMenu = document.getElementById('navList');
+  if(menuBtn) menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+  
+  // Active page highlighting
+  document.querySelectorAll('.nav-menu a').forEach(link => { 
+    if(link.href === window.location.href) link.classList.add('active'); 
+  });
+  
+  // Initialize cart
+  renderCart();
+</script>
+
+<!-- Professional Pop-up Ad System -->
+<script>
+(function() {
+    const adConfig = { showOnLoad: true, loadDelay: 3000, showOnAddToCart: true, showOnScroll: true, scrollThreshold: 50, showOnExit: true, maxPerSession: 3, closeButtonDelay: 3 };
+    const ads = [
+        { title: "🎉 SPECIAL OFFER!", message: "Buy 20+ items and get 15% OFF your entire order!", buttonText: "Shop Now →", buttonLink: "products.html", icon: "fas fa-tags", bgColor: "#cfa67b" },
+        { title: "🌿 New Arrivals!", message: "Check out our new eco-friendly laundry baskets and water bottles!", buttonText: "Explore →", buttonLink: "products.html", icon: "fas fa-leaf", bgColor: "#8b5e3c" },
+        { title: "📢 Join Our Workshop!", message: "Learn candle making & plastic recycling. Limited spots available!", buttonText: "Register Now →", buttonLink: "events.html", icon: "fas fa-calendar-alt", bgColor: "#6d4c41" },
+        { title: "💚 Refer a Friend!", message: "Get 10% off your next order when you refer a friend to Revibe!", buttonText: "Learn More →", buttonLink: "contact.html", icon: "fas fa-share-alt", bgColor: "#2ecc71" },
+        { title: "🚚 Free Shipping!", message: "On orders over P500. Shop our eco-friendly collection today!", buttonText: "Shop Now →", buttonLink: "products.html", icon: "fas fa-truck", bgColor: "#3498db" }
+    ];
+    function getRandomAd() { return ads[Math.floor(Math.random() * ads.length)]; }
+    let sessionAdCount = parseInt(sessionStorage.getItem('revibeAdCount') || '0');
+    let popupActive = false, exitIntentTriggered = false;
+    function createPopup(ad) {
+        if (popupActive || (adConfig.maxPerSession > 0 && sessionAdCount >= adConfig.maxPerSession)) return null;
+        const popup = document.createElement('div'); popup.id = 'revibe-popup';
+        popup.innerHTML = `<div class="revibe-popup-overlay"></div><div class="revibe-popup-content" style="border-top: 5px solid ${ad.bgColor}"><button class="revibe-popup-close" id="revibePopupClose">&times;</button><div class="revibe-popup-icon" style="background: ${ad.bgColor}20; color: ${ad.bgColor}"><i class="${ad.icon}"></i></div><h3>${ad.title}</h3><p>${ad.message}</p><a href="${ad.buttonLink}" class="revibe-popup-btn" style="background: ${ad.bgColor}">${ad.buttonText}</a><p class="revibe-popup-delay-note">Close button appears in <span id="closeTimer">${adConfig.closeButtonDelay}</span> seconds</p></div>`;
+        document.body.appendChild(popup);
+        const closeBtn = popup.querySelector('#revibePopupClose'); closeBtn.disabled = true; closeBtn.style.opacity = '0.5'; closeBtn.style.cursor = 'not-allowed';
+        let secondsLeft = adConfig.closeButtonDelay; const timerSpan = popup.querySelector('#closeTimer');
+        const timer = setInterval(() => { secondsLeft--; if (timerSpan) timerSpan.textContent = secondsLeft; if (secondsLeft <= 0) { clearInterval(timer); closeBtn.disabled = false; closeBtn.style.opacity = '1'; closeBtn.style.cursor = 'pointer'; const note = popup.querySelector('.revibe-popup-delay-note'); if (note) note.style.display = 'none'; } }, 1000);
+        closeBtn.onclick = () => { popup.remove(); popupActive = false; };
+        popup.querySelector('.revibe-popup-overlay').onclick = () => { if (!closeBtn.disabled) { popup.remove(); popupActive = false; } };
+        popupActive = true; sessionAdCount++; sessionStorage.setItem('revibeAdCount', sessionAdCount);
+        return popup;
+    }
+    function showRandomAd() { if (sessionAdCount >= adConfig.maxPerSession && adConfig.maxPerSession > 0) return; const ad = getRandomAd(); createPopup(ad); }
+    function injectStyles() {
+        const style = document.createElement('style');
+        style.textContent = `.revibe-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10000;animation:fadeIn 0.3s ease}.revibe-popup-content{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:35px;border-radius:24px;width:90%;max-width:450px;text-align:center;z-index:10001;box-shadow:0 20px 40px rgba(0,0,0,0.3);animation:slideUp 0.4s ease}.revibe-popup-close{position:absolute;top:15px;right:20px;font-size:28px;background:none;border:none;cursor:pointer;color:#999}.revibe-popup-close:hover{color:#333}.revibe-popup-icon{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}.revibe-popup-content h3{color:#5a3e2b;font-size:1.6rem;margin-bottom:12px;font-weight:700}.revibe-popup-content p{color:#666;margin-bottom:20px}.revibe-popup-btn{display:inline-block;padding:12px 30px;color:white;text-decoration:none;border-radius:50px;font-weight:600;transition:0.3s;margin-top:10px}.revibe-popup-btn:hover{transform:translateY(-2px);filter:brightness(1.05);color:white}.revibe-popup-delay-note{font-size:0.7rem;color:#aaa;margin-top:15px}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{opacity:0;transform:translate(-50%,-40%)}to{opacity:1;transform:translate(-50%,-50%)}}@media(max-width:550px){.revibe-popup-content{padding:25px;width:85%}.revibe-popup-content h3{font-size:1.3rem}}`;
+        document.head.appendChild(style);
+    }
+    function initPopupSystem() {
+        injectStyles();
+        if (adConfig.showOnLoad) { setTimeout(() => { if (!window.location.pathname.includes('checkout.html')) showRandomAd(); }, adConfig.loadDelay); }
+        if (adConfig.showOnScroll) { let scrollTriggered = false; window.addEventListener('scroll', () => { if (!scrollTriggered && !popupActive) { const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100; if (scrollPercent >= adConfig.scrollThreshold) { scrollTriggered = true; showRandomAd(); } } }); }
+        if (adConfig.showOnExit) { document.addEventListener('mouseleave', (e) => { if (!exitIntentTriggered && !popupActive && e.clientY <= 0) { exitIntentTriggered = true; showRandomAd(); } }); }
+    }
+    function hookAddToCart() {
+        const observer = new MutationObserver(() => { document.querySelectorAll('.add-to-cart-btn, .btn-cart').forEach(btn => { if (!btn.hasAttribute('data-ad-hooked')) { btn.setAttribute('data-ad-hooked', 'true'); btn.addEventListener('click', () => { if (adConfig.showOnAddToCart) { setTimeout(() => showRandomAd(), 500); } }); } }); });
+        observer.observe(document.body, { childList: true, subtree: true });
+        document.querySelectorAll('.add-to-cart-btn, .btn-cart').forEach(btn => { if (!btn.hasAttribute('data-ad-hooked')) { btn.setAttribute('data-ad-hooked', 'true'); btn.addEventListener('click', () => { if (adConfig.showOnAddToCart) { setTimeout(() => showRandomAd(), 500); } }); } });
+    }
+    initPopupSystem(); hookAddToCart();
+})();
+</script>
+</body>
+</html>
